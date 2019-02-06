@@ -25,6 +25,8 @@
  */
 #include "tasks.hpp"
 #include "examples/examples.hpp"
+#include <stdio.h>
+#include "io.hpp"
 
 /**
  * The main() creates tasks or "threads".  See the documentation of scheduler_task class at scheduler_task.hpp
@@ -40,8 +42,25 @@
  *        In either case, you should avoid using this bus or interfacing to external components because
  *        there is no semaphore configured for this bus and it should be used exclusively by nordic wireless.
  */
+void mytask(void* parameter)
+{
+    printf("\nLight Sensor Value: ");
+    while(1)
+    {
+        printf("%03d",LS.getPercentValue());
+        vTaskDelay(1000);
+        printf("\b\b\b");
+    }
+
+}
+
 int main(void)
 {
+    if(0 == xTaskCreate(mytask,"mine",1024,0,1,0))
+     {
+        printf("\n Cant create Task\n");
+     }
+
     /**
      * A few basic tasks for this bare-bone system :
      *      1.  Terminal task provides gateway to interact with the board through UART terminal.
@@ -58,7 +77,7 @@ int main(void)
     scheduler_add_task(new wirelessTask(PRIORITY_CRITICAL));
 
     /* Change "#if 0" to "#if 1" to run period tasks; @see period_callbacks.cpp */
-    #if 0
+    #if 1
     const bool run_1Khz = false;
     scheduler_add_task(new periodicSchedulerTask(run_1Khz));
     #endif
