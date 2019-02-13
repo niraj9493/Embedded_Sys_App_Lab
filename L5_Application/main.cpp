@@ -28,6 +28,9 @@
 #include <stdio.h>
 #include "io.hpp"
 
+#define LAB0 0      //<- Hello World - Displays Light Sensor Value on Terminal
+#define LAB1 1      //<- Uses External Switch to generate Interrupt and toggles pin P2.6 for 500ms
+
 /**
  * The main() creates tasks or "threads".  See the documentation of scheduler_task class at scheduler_task.hpp
  * for details.  There is a very simple example towards the beginning of this class's declaration.
@@ -42,6 +45,8 @@
  *        In either case, you should avoid using this bus or interfacing to external components because
  *        there is no semaphore configured for this bus and it should be used exclusively by nordic wireless.
  */
+
+#if LAB0
 void mytask(void* parameter)
 {
     printf("\nLight Sensor Value: ");
@@ -53,13 +58,17 @@ void mytask(void* parameter)
     }
 
 }
+#endif
 
 int main(void)
 {
+    printf("\nMAIN\n");
+#if LAB0
     if(0 == xTaskCreate(mytask,"mine",1024,0,1,0))
      {
         printf("\n Cant create Task\n");
      }
+#endif
 
     /**
      * A few basic tasks for this bare-bone system :
