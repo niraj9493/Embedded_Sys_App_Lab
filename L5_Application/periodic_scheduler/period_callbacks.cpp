@@ -32,21 +32,13 @@
 #include <stdio.h>
 #include "io.hpp"
 #include "periodic_callback.h"
-#define LAB1 1
+#include "c_period_callbacks.h"
+
+
 
 /// This is the stack size used for each of the period tasks (1Hz, 10Hz, 100Hz, and 1000Hz)
 const uint32_t PERIOD_TASKS_STACK_SIZE_BYTES = (512 * 4);
 
-#if LAB1
-#include "gpio.hpp"
-#include "eint.h"
-
-GPIO SWIT(P2_7);        //Pin connected to external switch
-GPIO CommPin(P2_6);     //Communication Pin between two controllers.
-uint8_t prev = 0;       //Variable for storing periodic 'count' variable when interrupt is generated.
-SemaphoreHandle_t Signal = 0;
-
-#endif
 /**
  * This is the stack size of the dispatcher task that triggers the period tasks to run.
  * Minimum 1500 bytes are needed in order to write a debug file if the period tasks overrun.
@@ -55,91 +47,43 @@ SemaphoreHandle_t Signal = 0;
  */
 const uint32_t PERIOD_MONITOR_TASK_STACK_SIZE_BYTES = (512 * 3);
 
-#if LAB1
-
-//Intr Routine
-void intr()
-{
-//    printf("Pressed\n");
-    xSemaphoreGiveFromISR(Signal,0);
-}
-
-#endif
-
 /// Called once before the RTOS is started, this is a good place to initialize things once
 bool period_init(void)
 {
-
-#if LAB1
-
-    SWIT.setAsInput();
-    CommPin.setAsOutput();
-    Signal = xSemaphoreCreateBinary();
-    eint3_enable_port2(7,eint_rising_edge, intr);
-
-#endif
-
-    return true; // Must return true upon success
+    return C_period_init();; // Must return true upon success
 }
 
 /// Register any telemetry variables
 bool period_reg_tlm(void)
 {
     // Make sure "SYS_CFG_ENABLE_TLM" is enabled at sys_config.h to use Telemetry
-    return true; // Must return true upon success
+    return C_period_reg_tlm(); // Must return true upon success
 }
 
 
 /**
  * Below are your periodic functions.
  * The argument 'count' is the number of times each periodic task is called.
- */
+ */ 
 
 void period_1Hz(uint32_t count)
 {
-
-#if LAB1
-
-#else
-    LE.toggle(1);
-#endif
-
+    C_period_1Hz(count);
 }
 
 void period_10Hz(uint32_t count)
 {
-
-#if LAB1
-    if(xSemaphoreTake(Signal,0))
-    {
-        CommPin.setHigh();
-        prev = count;
-    }
-    if(count == (prev+5))
-    {
-        CommPin.setLow();
-    }
-
-#else
-
-    LE.toggle(2);
-
-#endif
+    C_period_100Hz(count);
 }
 
 void period_100Hz(uint32_t count)
 {
-#if LAB1
-
-#else
-    LE.toggle(3);
-#endif
-
+    C_period_100Hz(count);
 }
 
 // 1Khz (1ms) is only run if Periodic Dispatcher was configured to run it at main():
 // scheduler_add_task(new periodicSchedulerTask(run_1Khz = true));
 void period_1000Hz(uint32_t count)
 {
-    LE.toggle(4);
+    C_period_1000Hz(count);
 }
