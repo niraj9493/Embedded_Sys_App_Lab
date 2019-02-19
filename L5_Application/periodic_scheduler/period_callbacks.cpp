@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include "io.hpp"
 #include "periodic_callback.h"
-#include "c_period_callbacks.h"
+#include "c_code/c_period_callbacks.h"
 
 
 
@@ -50,7 +50,7 @@ const uint32_t PERIOD_MONITOR_TASK_STACK_SIZE_BYTES = (512 * 3);
 /// Called once before the RTOS is started, this is a good place to initialize things once
 bool period_init(void)
 {
-    return C_period_init();; // Must return true upon success
+    return C_period_init(); // Must return true upon success
 }
 
 /// Register any telemetry variables
@@ -73,7 +73,7 @@ void period_1Hz(uint32_t count)
 
 void period_10Hz(uint32_t count)
 {
-    C_period_100Hz(count);
+    C_period_10Hz(count);
 }
 
 void period_100Hz(uint32_t count)

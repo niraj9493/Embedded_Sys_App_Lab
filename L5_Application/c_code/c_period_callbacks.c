@@ -7,8 +7,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "c_uart2.h"
+#include "c_led_display.h"
 
 #define LAB1 0
+#define LAB2 1
 
 #if LAB1
 #include "gpio.hpp"
@@ -40,6 +42,12 @@ bool C_period_init(void) {
     eint3_enable_port2(7, eint_rising_edge, intr);
 #endif
 
+#if LAB2
+    uart2_init(9600,32,32);
+    c_led_display_init();
+    c_led_display_clear();
+#endif
+
     return true;
 }
 bool C_period_reg_tlm(void) {
@@ -51,14 +59,17 @@ void C_period_1Hz(uint32_t count) {
 
 #if LAB1
 
-#else
+#elif LAB2
 
     char byte = 0;
-    if (uart2_getchar(&byte, 0)) {
+    if(uart2_getchar(&byte, 0))
+    {
+        c_led_display_set_number(byte);
+    }
+#else
 
 #endif
 
-    }
 }
 
 void C_period_10Hz(uint32_t count) {
@@ -76,7 +87,7 @@ void C_period_10Hz(uint32_t count) {
 
 #else
 
-    LE.toggle(2);
+    //LE.toggle(2);
 
 #endif
 }

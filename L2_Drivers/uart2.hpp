@@ -51,5 +51,4 @@ class Uart2 : public UartDev, public SingletonTemplate<Uart2>
         friend class SingletonTemplate<Uart2>;  ///< Friend class used for Singleton Template
 };
 
-
 #endif /* UART2_HPP__ */

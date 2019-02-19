@@ -18,7 +18,12 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+bool uart2_init(int baudRate,int rxQSize,int txQSize);
+
 bool uart2_getchar(char *byte, uint32_t timeout_ms);
+
+bool uart2_putchar(char out, uint32_t timeout_ms);
+
 
 #ifdef __cplusplus
 }
