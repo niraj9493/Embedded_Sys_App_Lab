@@ -6,7 +6,7 @@
  */
 #include <stdint.h>
 #include <stdbool.h>
-#include "c_uart2.h"
+#include "c_uart.h"
 #include "c_led_display.h"
 
 #define LAB1 0
@@ -43,7 +43,8 @@ bool C_period_init(void) {
 #endif
 
 #if LAB2
-    uart2_init(9600,32,32);
+//    uart2_init(9600,32,32);
+    uart_init(uart2,9600,32,32);
     c_led_display_init();
     c_led_display_clear();
 #endif
@@ -59,13 +60,6 @@ void C_period_1Hz(uint32_t count) {
 
 #if LAB1
 
-#elif LAB2
-
-    char byte = 0;
-    if(uart2_getchar(&byte, 0))
-    {
-        c_led_display_set_number(byte);
-    }
 #else
 
 #endif
@@ -85,6 +79,13 @@ void C_period_10Hz(uint32_t count) {
         CommPin.setLow();
     }
 
+#elif LAB2
+
+    char byte = 0;
+    if(uart_getchar(uart2,&byte, 0))
+    {
+        c_led_display_set_number(byte);
+    }
 #else
 
     //LE.toggle(2);
