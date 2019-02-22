@@ -16,7 +16,7 @@ extern "C" {
 
 bool c_led_display_init(void);
 
-void c_led_display_clear(void);
+void c_led_display_clear(void );
 
 void c_led_display_set_number(char num);
 

@@ -9,8 +9,9 @@
 #include "c_uart.h"
 #include "c_led_display.h"
 
-#define LAB1 0
-#define LAB2 1
+#define LAB1 0      //<- Uses External Switch to generate Interrupt and toggles pin P2.6 for 500ms
+#define LAB2 1      /*<- UART communication between two boards - Takes Sensor value on board-1, displays on\
+                         LED segment display on board2*/
 
 #if LAB1
 #include "gpio.hpp"
@@ -35,6 +36,7 @@ void intr()
 #endif
 
 bool C_period_init(void) {
+
 #if LAB1
     SWIT.setAsInput();
     CommPin.setAsOutput();
@@ -43,7 +45,6 @@ bool C_period_init(void) {
 #endif
 
 #if LAB2
-//    uart2_init(9600,32,32);
     uart_init(uart2,9600,32,32);
     c_led_display_init();
     c_led_display_clear();
@@ -51,6 +52,7 @@ bool C_period_init(void) {
 
     return true;
 }
+
 bool C_period_reg_tlm(void) {
     return true;
 }
