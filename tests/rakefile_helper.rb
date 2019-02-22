@@ -186,6 +186,7 @@ module RakefileHelpers
     report "Brief code coverage report; use gen_coverage.sh for more details"
     line()
 
+<<<<<<< HEAD
     
     # Form the path of the source code under test
     src_path = $yml_cfg['compiler']['source_path']
@@ -210,6 +211,34 @@ module RakefileHelpers
         cmd_output = execute(cmd, false, false)
         
         full_report += cmd_output + "\n"
+=======
+    # Form the path of the source code under test
+    src_path_ = $yml_cfg['compiler']['source_path'].dup
+    #src_path_.delete_if {|dir| dir.is_a?(Array)}
+    src_path_.each do |src_path|
+      #src_path = $yml_cfg['compiler']['source_path']
+      src_path = File.join(src_path, "**")
+      src_path = File.join(src_path, "*.c")
+    
+      full_report = ""
+      ut_output_dir = $yml_cfg['compiler']['build_path']
+
+      # For each file in the source code directory
+      Dir[src_path].each do |fname|
+        fname_only = File.basename(fname)
+
+        # Remove the *.c and add .gcda extension
+        gcda = File.basename(fname_only, ".c") + ".gcda"
+
+        # Attempt to find the code_under_test.gcda at the ut build directory
+        gcda_path = File.join(ut_output_dir, gcda)
+        if (File.exists?(gcda_path))
+          # Get coverage, but do not output a file, and filter the "Lines executed:n%" msg
+          cmd = "gcov --no-output " + gcda_path # + " | grep '%'"
+          cmd_output = execute(cmd, false, false)
+        
+          full_report += cmd_output + "\n"
+>>>>>>> 8846347b631d229af2f8531f8f0c424650b8632a
         '''
         # Print back to the user
         msg = "%48s" % [fname]
@@ -220,6 +249,7 @@ module RakefileHelpers
           full_report += "#{msg} coverage: \033[32m#{cmd_output}\033[0m\n"
         end
         '''
+<<<<<<< HEAD
       end
     end
 
@@ -229,6 +259,18 @@ module RakefileHelpers
       report full_report
     end 
     line()
+=======
+        end
+      end
+
+      if full_report == ""
+        report "Error generating code coverage report"
+      else
+        report full_report
+      end 
+      line()
+    end
+>>>>>>> 8846347b631d229af2f8531f8f0c424650b8632a
   end
 
   def run_tests(test_files)
@@ -249,7 +291,10 @@ module RakefileHelpers
       # Detect dependencies and build required required modules
       header_list = extract_headers(test) + ['cmock.h']
       header_list.each do |header|
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8846347b631d229af2f8531f8f0c424650b8632a
         #create mocks if needed
         if (header =~ /Mock/)
           require "./install_unity_cmock/lib/cmock.rb"

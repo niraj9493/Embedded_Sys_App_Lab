@@ -1,7 +1,8 @@
 compiler:
   path: gcc
-  source_path: ['./code/','../L5_Application/c_code/']
-  #source_path: '../L5_Application/c_code/'
+  source_path: 
+    - './code/'
+    - '../L5_Application/c_code/'
   unit_tests_path: &unit_tests_path 'code_test/'
   build_path:      &build_path 'ut_build/'
   options:
