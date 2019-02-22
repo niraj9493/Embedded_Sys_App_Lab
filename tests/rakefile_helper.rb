@@ -179,15 +179,11 @@ module RakefileHelpers
     raise "There were failures" if (summary.failures > 0) && $return_error_on_failures
   end
 
-  # This locates all *.gcda files to the corresponding files at the "code"
-  # directory and prints the coverage for those
   def output_coverage
     line()
     report "Brief code coverage report; use gen_coverage.sh for more details"
     line()
 
-<<<<<<< HEAD
-    
     # Form the path of the source code under test
     src_path = $yml_cfg['compiler']['source_path']
     src_path = File.join(src_path, "**")
