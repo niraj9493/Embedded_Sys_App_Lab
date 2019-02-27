@@ -5,7 +5,7 @@ import subprocess
 file_list = []
 
 #take the output as string
-
+#adding changes
 #git_out = subprocess.Popen(('git','status'), stdout = subprocess.PIPE)
 #result = subprocess.check_output(['grep','modified'], stdin = git_out.stdout)
 #git_out.wait()
