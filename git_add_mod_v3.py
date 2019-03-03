@@ -17,7 +17,7 @@ try:
 except subprocess.CalledProcessError as grepexc:
         #print "error code", grepexc.returncode, grepexc.output
         if(grepexc.returncode == 1):
-            print "No modified files to add..."
+            raise NameError("No modified files to add...")
             exit(0)
 
 
@@ -32,18 +32,17 @@ for word in result.split():
             file_list.append(word)
 
 #print file_list
-print'\n'
-print'MODIFIED FILES FOUND : ',len(file_list)
-print'\n\n\n'
+print('\n')
+print('MODIFIED FILES FOUND : ',len(file_list))
+print('\n\n\n')
 
 for i in file_list:
-    print 'Adding ',i
-    git_add=subprocess.Popen(('git','add',i))
-    #print git_add
+    print('Adding %s' %i.decode("utf-8"))
+    git_add=subprocess.Popen(('git','add',i.decode("utf-8") ))
     git_add.wait()
 
 
-print'\n\n\n'
-print'============================================'
-print'GIT STATUS \n\n'
+print('\n\n\n')
+print('============================================')
+print('GIT STATUS \n\n')
 git_out= subprocess.Popen(('git','status','-uno'))

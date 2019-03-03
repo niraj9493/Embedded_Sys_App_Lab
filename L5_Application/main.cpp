@@ -29,8 +29,9 @@
 #include "io.hpp"
 
 #define LAB0 0      //<- Hello World - Displays Light Sensor Value on Terminal
-#define LAB1 1      //<- Uses External Switch to generate Interrupt and toggles pin P2.6 for 500ms
-
+#define LAB1 0      //<- Uses External Switch to generate Interrupt and toggles pin P2.6 for 500ms
+#define LAB2 1      //<- UART communication between two boards - Takes Sensor value on board-1, displays on\
+                         LED segment display on board2
 /**
  * The main() creates tasks or "threads".  See the documentation of scheduler_task class at scheduler_task.hpp
  * for details.  There is a very simple example towards the beginning of this class's declaration.

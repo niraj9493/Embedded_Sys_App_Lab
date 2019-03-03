@@ -17,11 +17,10 @@ void test_C_period_init(void) {
 
 
     uart_init_ExpectAndReturn(2,9600,0,0,true);
-//    uart_init_IgnoreArg_u();
     uart_init_IgnoreArg_rxQSize();
     uart_init_IgnoreArg_txQSize();
-    c_led_display_init_IgnoreAndReturn(true);
-    c_led_display_clear_Ignore();
+    c_led_display_init_ExpectAnyArgsAndReturn(true);
+    c_led_display_clear_Expect();
 
     C_period_init();
 }
@@ -30,8 +29,6 @@ void test_C_period_init(void) {
 void test_C_period_10Hz(void) {
     uart_getchar_ExpectAndReturn(2,0,0,true);
     uart_getchar_IgnoreArg_byte();
-    c_led_display_set_number_CMockIgnore();
-    //c_led_display_set_number_Expect(0);
-    //c_led_display_set_number_IgnoreArg_num();
+    c_led_display_set_number_ExpectAnyArgs();
     C_period_10Hz(0);
 }
