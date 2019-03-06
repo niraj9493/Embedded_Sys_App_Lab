@@ -9,7 +9,9 @@
 #include "c_period_callbacks.h"
 #include "c_uart.h"
 #include "c_led_display.h"
+#include "c_gpio.h"
 #include "can.h"
+
 
 #if LAB1
 #include "gpio.hpp"
@@ -108,15 +110,29 @@ void C_period_10Hz(uint32_t count) {
     tx_msg.msg_id = 0x100;
     tx_msg.frame_fields.is_29bit = 1; //1 if the 11-bit ID
     tx_msg.frame_fields.data_len = 8;
-//    memcpy((uint64_t*)tx_msg.data.qword,(uint64_t*)msg,sizeof(msg));
     tx_msg.data.qword = 0x1122334455667788;
-   if(  CAN_tx(can1,&tx_msg,2) == true)
-   {
-       printf("TX\n");
-   }
+    if(readSwitch(2))
+    {
+       tx_msg.data.bytes[0] = 0xAA;
+       if(CAN_tx(can1, &tx_msg, 0))
+       {
+           printf("switch pressed");
+       }
+    }
+    else
+    {
+        tx_msg.data.bytes[0] = 0x00;
+        if(CAN_tx(can1, &tx_msg, 0))
+        {
+            printf("Switch not pressed");
+        }
+    }
 
+#else
 
-#elif LAB3RX
+#endif
+
+#if LAB3RX
 
     can_msg_t rx_msg;
     if(CAN_rx(can1,&rx_msg,0))
