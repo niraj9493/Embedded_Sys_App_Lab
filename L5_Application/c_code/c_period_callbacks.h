@@ -13,12 +13,19 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+
 bool C_period_init(void);
 bool C_period_reg_tlm(void);
 void C_period_1Hz(uint32_t count);
 void C_period_10Hz(uint32_t count);
 void C_period_100Hz(uint32_t count);
 void C_period_1000Hz(uint32_t count);
+
+#define LAB1 0      //<- Uses External Switch to generate Interrupt and toggles pin P2.6 for 500ms
+#define LAB2 0      //<- UART communication between two boards - Takes Sensor value on board-1, displays on LED segment display on board2
+#define LAB3TX 0      //<- CAN Communication Between two boards
+#define LAB3RX 1      //<- CAN Communication Between two boards
+
 
 #ifdef __cplusplus
 }

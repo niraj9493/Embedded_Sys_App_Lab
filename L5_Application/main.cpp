@@ -63,6 +63,7 @@ void mytask(void* parameter)
 
 int main(void)
 {
+
     printf("\nMAIN\n");
 #if LAB0
     if(0 == xTaskCreate(mytask,"mine",1024,0,1,0))

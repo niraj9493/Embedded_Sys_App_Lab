@@ -125,7 +125,7 @@
 #define configMAX_CO_ROUTINE_PRIORITIES         ( 1 )   ///< No need if not using co-routines
 
 /* Run time and task stats gathering related definitions. */
-#define configUSE_TRACE_FACILITY                0       ///< FreeRTOS + Percepio Tracealyzer trace facility
+#define configUSE_TRACE_FACILITY                1       ///< FreeRTOS + Percepio Tracealyzer trace facility
 #define configUSE_STATS_FORMATTING_FUNCTIONS    0       ///< Older FreeRTOS functions
 #define INCLUDE_eTaskGetState                   1       ///< Was needed by the "info" command-line handler
 #define configGENERATE_RUN_TIME_STATS           1
@@ -206,6 +206,8 @@
      #include "trace/trcRecorder.h"
 #else  /* (0 == configUSE_TRACE_FACILITY) */
     #include "trace/trcRecorder.h"
+    #include "trace/trcKernelPort.h"
+
 #endif /* (1 == configUSE_TRACE_FACILITY) */
 
 #endif /* FREERTOS_CONFIG_H */

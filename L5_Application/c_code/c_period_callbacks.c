@@ -4,15 +4,12 @@
  * The purpose of this "C" callbacks is to provide the code to be able
  * to call pure C functions and unit-test it in C test framework
  */
-#include <stdint.h>
-#include <stdbool.h>
+
+#include "stddef.h"
+#include "c_period_callbacks.h"
 #include "c_uart.h"
 #include "c_led_display.h"
-
-#define LAB1 0      //<- Uses External Switch to generate Interrupt and toggles pin P2.6 for 500ms
-#define LAB2 0      //<- UART communication between two boards - Takes Sensor value on board-1, displays on\
-                         LED segment display on board2
-#define LAB3 1      //<- CAN Communication Between two boards
+#include "can.h"
 
 #if LAB1
 #include "gpio.hpp"
@@ -51,8 +48,13 @@ bool C_period_init(void) {
     c_led_display_clear();
 #endif
 
-#if LAB3
-
+#if LAB3TX || LAB3RX
+    c_led_display_init();
+    c_led_display_clear();
+    CAN_init(can1,100,100,100,NULL,NULL);
+    CAN_reset_bus(can1);
+    CAN_bypass_filter_accept_all_msgs();
+    CAN_reset_bus(can1);
 
 #endif
 
@@ -68,8 +70,13 @@ void C_period_1Hz(uint32_t count) {
 
 #if LAB1
 
-#else
+#elif LAB2
 
+#elif LAB3TX || LAB3RX
+
+        CAN_reset_bus(can1);
+        CAN_bypass_filter_accept_all_msgs();
+        CAN_reset_bus(can1);
 #endif
 
 }
@@ -94,6 +101,36 @@ void C_period_10Hz(uint32_t count) {
     {
         c_led_display_set_number(byte);
     }
+
+#elif LAB3TX
+//    char msg[8] = "HELLO123";
+    can_msg_t tx_msg;
+    tx_msg.msg_id = 0x100;
+    tx_msg.frame_fields.is_29bit = 1; //1 if the 11-bit ID
+    tx_msg.frame_fields.data_len = 8;
+//    memcpy((uint64_t*)tx_msg.data.qword,(uint64_t*)msg,sizeof(msg));
+    tx_msg.data.qword = 0x1122334455667788;
+   if(  CAN_tx(can1,&tx_msg,2) == true)
+   {
+       printf("TX\n");
+   }
+
+
+#elif LAB3RX
+
+    can_msg_t rx_msg;
+    if(CAN_rx(can1,&rx_msg,0))
+    {
+        if(rx_msg.data.bytes[0] == 0xAA)
+        {
+            c_led_display_set_number(1);
+        }
+        else
+        {
+            c_led_display_set_number(0);
+        }
+    }
+
 #else
 
     //LE.toggle(2);
