@@ -16,10 +16,10 @@ extern "C" {
 #include <stdbool.h>
 #include <stddef.h>
 
-bool c_lightsensor_init(); ///< Initializes this device, @returns true if successful
+bool c_lightsensor_init(void); ///< Initializes this device, @returns true if successful
 
-uint16_t c_getRawValue();       ///< @returns light sensor reading
-uint8_t  c_getPercentValue();
+uint16_t c_getRawValue(void);       ///< @returns light sensor reading
+uint8_t  c_getPercentValue(void);
 
 
 #ifdef __cplusplus

@@ -5,17 +5,15 @@
  * to call pure C functions and unit-test it in C test framework
  */
 
-#include "stddef.h"
 #include "c_period_callbacks.h"
 #include "c_uart.h"
 #include "c_led_display.h"
 #include "c_gpio.h"
-#include "can.h"
-#include "_can_dbc/generated_can.h" //LAB4
+#include "can.h" //LAB3 & LAB4
 #include "c_light_sensor.h" //LAB4
 #include <string.h> //LAB4
+#include <generated_can.h> //LAB4
 
-// This method needs to be defined once, and AGC will call it for all dbc_encode_and_send_FOO() functions
 bool dbc_app_send_can_msg(uint32_t mid, uint8_t dlc, uint8_t bytes[8])
 {
     can_msg_t can_msg = { 0 };

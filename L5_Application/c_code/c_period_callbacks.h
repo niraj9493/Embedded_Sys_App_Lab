@@ -12,6 +12,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "stddef.h"
 
 
 bool C_period_init(void);
