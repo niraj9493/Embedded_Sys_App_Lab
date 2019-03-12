@@ -23,7 +23,7 @@ void C_period_1000Hz(uint32_t count);
 
 #define LAB1 0      //<- Uses External Switch to generate Interrupt and toggles pin P2.6 for 500ms
 #define LAB2 0      //<- UART communication between two boards - Takes Sensor value on board-1, displays on LED segment display on board2
-#define LAB3TX 1      //<- CAN Communication Between two boards
+#define LAB3TX 0      //<- CAN Communication Between two boards
 #define LAB3RX 0      //<- CAN Communication Between two boards
 
 

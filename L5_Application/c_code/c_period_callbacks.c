@@ -11,6 +11,20 @@
 #include "c_led_display.h"
 #include "c_gpio.h"
 #include "can.h"
+#include "_can_dbc/generated_can.h" //LAB4
+#include "c_light_sensor.h" //LAB4
+#include <string.h> //LAB4
+
+// This method needs to be defined once, and AGC will call it for all dbc_encode_and_send_FOO() functions
+bool dbc_app_send_can_msg(uint32_t mid, uint8_t dlc, uint8_t bytes[8])
+{
+    can_msg_t can_msg = { 0 };
+    can_msg.msg_id                = mid;
+    can_msg.frame_fields.data_len = dlc;
+    memcpy(can_msg.data.bytes, bytes, dlc);
+
+    return CAN_tx(can1, &can_msg, 0);
+}
 
 
 #if LAB1
@@ -60,6 +74,11 @@ bool C_period_init(void) {
 
 #endif
 
+    c_lightsensor_init();
+    CAN_init(can1,100,100,100,NULL,NULL);
+    CAN_bypass_filter_accept_all_msgs();
+    CAN_reset_bus(can1);
+
     return true;
 }
 
@@ -81,6 +100,9 @@ void C_period_1Hz(uint32_t count) {
         CAN_reset_bus(can1);
 #endif
 
+
+        CAN_bypass_filter_accept_all_msgs();
+        CAN_reset_bus(can1);
 }
 
 void C_period_10Hz(uint32_t count) {
@@ -105,7 +127,7 @@ void C_period_10Hz(uint32_t count) {
     }
 
 #elif LAB3TX
-//    char msg[8] = "HELLO123";
+
     can_msg_t tx_msg;
     tx_msg.msg_id = 0x100;
     tx_msg.frame_fields.is_29bit = 1; //1 if the 11-bit ID
@@ -128,15 +150,15 @@ void C_period_10Hz(uint32_t count) {
         }
     }
 
-#else
 
 #endif
 
 #if LAB3RX
 
     can_msg_t rx_msg;
-    if(CAN_rx(can1,&rx_msg,0))
+    if(CAN_rx(can1,&rx_msg,1))
     {
+        printf("->\n");
         if(rx_msg.data.bytes[0] == 0xAA)
         {
             c_led_display_set_number(1);
@@ -150,6 +172,10 @@ void C_period_10Hz(uint32_t count) {
 #else
 
     //LE.toggle(2);
+    SensorStructure_t obj;
+    obj.MY_SENSOR_unsigned1 = c_getPercentValue();
+    dbc_encode_and_send_SensorStructure(&obj);
+
 
 #endif
 }

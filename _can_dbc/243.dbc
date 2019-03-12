@@ -32,8 +32,10 @@ NS_ :
 
 BS_:
 
-BU_: DBG DRIVER IO MOTOR SENSOR
+BU_: DBG DRIVER IO MOTOR SENSOR TX RX
 
+BO_ 243 SensorStructure: 1 TX
+ SG_ MY_SENSOR_unsigned1 : 0|8@1+ (1,0) [0|0] "" RX
 
 BO_ 500 DBC_TEST1: 8 IO
  SG_ DBC_TEST1_unsigned1 : 0|8@1+ (1,0) [0|0] "" DBG
